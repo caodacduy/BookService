@@ -10,9 +10,9 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-public class AuthenticationRequest {
+public class LoginRequest {
     @NotEmpty(message = "NOT_NULL")
-    private String email;
+    private String username;
 
     @NotEmpty(message = "NOT_NULL")
     private String password;

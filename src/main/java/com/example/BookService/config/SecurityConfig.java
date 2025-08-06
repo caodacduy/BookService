@@ -1,18 +1,21 @@
 package com.example.BookService.config;
 
 
-//import com.example.BookService.service.UserServiceDetail;
+import com.example.BookService.security.AuthTokenFilter;
+import com.example.BookService.service.UserDetailServiceImpl;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.AuthenticationProvider;
+import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
 import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
 import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
 import org.springframework.security.config.http.SessionCreationPolicy;
-import org.springframework.security.core.userdetails.UserDetailsService;
+
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
@@ -27,9 +30,13 @@ public class SecurityConfig {
     private static final String[] PUBLIC_ENDPOINT ={
         "/auth/**"
     };
-    private  final CustomizeRequestFilter requestFilter;
 
-//    private  final UserServiceDetail userServiceDetail;
+    private  final UserDetailServiceImpl userDetailService;
+
+    @Bean
+    public AuthTokenFilter authenticationJwtTokenFilter() {
+        return new AuthTokenFilter();
+    }
 
     @Bean
     public AuthenticationManager authenticationManager(AuthenticationConfiguration config)
@@ -44,8 +51,8 @@ public class SecurityConfig {
                 .authorizeHttpRequests(auth->auth.requestMatchers(PUBLIC_ENDPOINT).permitAll()
                         .anyRequest().authenticated()
                 )
-//                .authenticationProvider(authenticationProvider()).addFilterBefore(requestFilter, UsernamePasswordAuthenticationFilter.class)
-//                .addFilterBefore(authTokenFilter, UsernamePasswordAuthenticationFilter.class)
+                .authenticationProvider(authenticationProvider())
+                .addFilterBefore(authenticationJwtTokenFilter(), UsernamePasswordAuthenticationFilter.class)
                 .formLogin(AbstractHttpConfigurer::disable)
                 .httpBasic(AbstractHttpConfigurer::disable);
 
@@ -57,6 +64,14 @@ public class SecurityConfig {
         return new BCryptPasswordEncoder();
     }
 
+
+    @Bean
+    public AuthenticationProvider authenticationProvider(){
+        DaoAuthenticationProvider authProvider=new DaoAuthenticationProvider();
+        authProvider.setPasswordEncoder(passwordEncoder());
+        authProvider.setUserDetailsService(userDetailService);
+        return authProvider;
+    }
 
 //    @Bean
 //    public AuthenticationManager authenticationManager(HttpSecurity http, PasswordEncoder passwordEncoder, UserDetailsService userDetailsService)throws Exception{

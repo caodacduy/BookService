@@ -1,8 +1,12 @@
 package com.example.BookService.dto.response;
 
 
-import com.example.BookService.enumType.ERole;
+import com.example.BookService.entity.Role;
 import lombok.*;
+
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
 
 @Getter
 @Setter
@@ -14,5 +18,5 @@ public class UserResponse {
     private String email;
     private String username;
     private String password;
-    private ERole role;
+    private Set<Role> roles;
 }

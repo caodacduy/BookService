@@ -2,12 +2,15 @@ package com.example.BookService.dto.request;
 
 
 
+import com.example.BookService.entity.Role;
 import com.example.BookService.enumType.ERole;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotEmpty;
 
 import jakarta.validation.constraints.Size;
 import lombok.*;
+
+import java.util.Set;
 
 @Getter
 @Setter
@@ -25,5 +28,5 @@ public class UserRequest {
     @NotEmpty(message = "NOT_NULL")
     @Size(min = 8, message = "INVALID_PASSWORD")
     private String password;
-    private ERole role;
+    private Set<String> role;
 }

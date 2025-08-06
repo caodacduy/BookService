@@ -26,7 +26,7 @@ public class User {
     private String username;
     private String password;
 
-    @ManyToMany
+    @ManyToMany(fetch = FetchType.LAZY)
     private Set<Role> roles = new HashSet<>();
 
 

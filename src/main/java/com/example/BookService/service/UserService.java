@@ -30,8 +30,6 @@ public class UserService {
     public UserResponse createUser(UserRequest request){
         if (userRepository.existsByEmail(request.getEmail())) throw new AppException(ErrorCode.USER_EXISTED);
 
-        if (request.getPassword().length()<8) throw new AppException(ErrorCode.INVALID_PASSWORD);
-
         User user=userMapper.toUser(request);
         user.setPassword(passwordEncoder.encode(request.getPassword()));
         return userMapper.toUserResponse(userRepository.save(user));

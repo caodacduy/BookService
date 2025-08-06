@@ -6,6 +6,7 @@ import com.example.BookService.dto.response.ApiResponse;
 import com.example.BookService.dto.response.AuthorResponse;
 import com.example.BookService.service.AuthorService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -17,6 +18,7 @@ public class AuthorController {
     final AuthorService authorService;
 
     @PostMapping("")
+    @PreAuthorize("hasRole('ADMIN')")
     ApiResponse<AuthorResponse> createAuthor(@RequestBody AuthorRequest request){
         return  ApiResponse.<AuthorResponse>builder()
                 .result(authorService.createAuthor(request))
@@ -24,6 +26,7 @@ public class AuthorController {
     }
 
     @GetMapping("")
+    @PreAuthorize("hasRole('USER') or hasRole('ADMIN')")
     ApiResponse<List<AllAuthorResponse>>  getAllAuthor(){
         return ApiResponse.<List<AllAuthorResponse>>builder()
                 .result(authorService.getAllAuthor())
@@ -31,6 +34,7 @@ public class AuthorController {
     }
 
     @GetMapping("/{id}")
+    @PreAuthorize("hasRole('USER') or hasRole('ADMIN')")
     ApiResponse<AuthorResponse> getAuthor(@PathVariable int id){
         return ApiResponse.<AuthorResponse>builder()
                 .result(authorService.getAuthorInfo(id))

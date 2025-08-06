@@ -15,8 +15,8 @@ spring:
     show-sql: true
 
 jwt:
-  accessKey: "WlioIGFI3ZMomFc8/aZP0/CMQgU6My4h/+v+wC3y9rQ="
+  jwtSecret: "03c6852f059b63a75f1c4efc6be7c2ae292abcdb82f7f31157456b641c133838"
   refreshKey: "YTOwveDw8h9T/nGjQvAnqiReaznqfMAn3cwmcoXRvfk="
-  valid-duration: 3600 # in second
-  refreshable-duration: 20000 #in seconds
+  jwtExpirationMs: 3600
+
 

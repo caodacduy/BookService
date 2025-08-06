@@ -1,5 +1,6 @@
 package com.example.BookService.enumType;
 
+import lombok.AllArgsConstructor;
 import lombok.Getter;
 
 @Getter
